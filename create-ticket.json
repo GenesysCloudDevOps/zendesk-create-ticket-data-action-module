@@ -1,0 +1,66 @@
+{
+  "name": "Create Ticket",
+  "integrationType": "zendesk-data-actions",
+  "actionType": "custom",
+  "config": {
+    "request": {
+      "requestUrlTemplate": "/api/v2/tickets.json",
+      "requestType": "POST",
+      "headers": {
+        "UserAgent": "PureCloudIntegrations/1.0",
+        "Content-Type": "application/json"
+      },
+      "requestTemplate": "{\r\n  \"ticket\": {\r\n    \"subject\":  \"${input.subject}\",\r\n    \"comment\":  { \"body\": \"${input.body}\" },\r\n    \"priority\": \"${input.priority}\"\r\n  }\r\n}"
+    },
+    "response": {
+      "translationMap": {
+        "ticket": "$.ticket"
+      },
+      "translationMapDefaults": {},
+      "successTemplate": "${ticket}"
+    }
+  },
+  "contract": {
+    "input": {
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "POST TICKET",
+        "description": "Create a ticket in Zendesk.",
+        "type": "object",
+        "required": [
+          "subject",
+          "body",
+          "priority"
+        ],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "description": "The subject of the ticket"
+          },
+          "body": {
+            "type": "string",
+            "description": "The comment body for the ticket"
+          },
+          "priority": {
+            "type": "string",
+            "description": "The priority of the ticket"
+          }
+        }
+      }
+    },
+    "output": {
+      "successSchema": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "title": "Ticket",
+        "description": "Created a Zendesk ticket",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "secure": false
+}
